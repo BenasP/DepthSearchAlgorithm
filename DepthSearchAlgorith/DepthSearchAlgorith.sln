@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepthSearchAlgorith", "DepthSearchAlgorith\DepthSearchAlgorith.csproj", "{10694A05-4374-41F4-86D2-62F994B6D568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepthSearchAlgorith.Tests", "DepthSearchAlgorith.Tests\DepthSearchAlgorith.Tests.csproj", "{5C663DC6-21D1-4339-BAFD-C9B52A733611}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10694A05-4374-41F4-86D2-62F994B6D568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10694A05-4374-41F4-86D2-62F994B6D568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10694A05-4374-41F4-86D2-62F994B6D568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10694A05-4374-41F4-86D2-62F994B6D568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C663DC6-21D1-4339-BAFD-C9B52A733611}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C663DC6-21D1-4339-BAFD-C9B52A733611}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C663DC6-21D1-4339-BAFD-C9B52A733611}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C663DC6-21D1-4339-BAFD-C9B52A733611}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
