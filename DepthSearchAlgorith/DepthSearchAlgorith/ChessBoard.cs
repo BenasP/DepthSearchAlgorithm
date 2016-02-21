@@ -4,96 +4,178 @@ namespace DepthSearchAlgorith
 {
     public class ChessBoard
     {
-        private int[,] matrix;
-        private List<string> possibleMoves;
-        private readonly int amountOfObjects;
+        private int[,] request;
 
-        public ChessBoard(int[,] matrix, List<string> possibleMoves, int amountOfObjects)
+        public int[,] Matrix { get; set; }
+        public List<string> PossibleMoves { get; set; }
+        public bool IsAssignmentSuccessful { get; set; } = true;
+
+        public ChessBoard(int[,] matrix)
         {
-            this.matrix = matrix;
-            this.possibleMoves = possibleMoves;
-            this.amountOfObjects = amountOfObjects;
+            Matrix = matrix;
         }
 
-        public int[,] Run()
+        public ChessBoard(int[,] matrix, List<string> possibleMoves)
         {
-            InitializeMatrixGeneration();
-            //for (var obj = 0; obj < amountOfObjects; obj++)
-            //{
-            //    for (int lengthIndex = 0; lengthIndex < matrix.GetLength(0); lengthIndex++)
-            //    {
-            //        for (int widthIndex = 0; widthIndex < matrix.GetLength(1); widthIndex++)
-            //        {
-            //            if ((matrix[lengthIndex, widthIndex] != 1) || (matrix[lengthIndex, widthIndex] != 2))
-            //            {
-            //                matrix[lengthIndex, widthIndex] = 1;
-            //                GenerateCrossingOutPaths(lengthIndex, widthIndex);
-            //            }
-            //        }
-            //    }
-            //}
-            return matrix;
+            Matrix = matrix;
+            PossibleMoves = possibleMoves;
         }
 
-        private void InitializeMatrixGeneration()
+        public bool IsRowClear(int col, int row)
         {
-            var tempMatrix = new int[matrix.GetLength(0), matrix.GetLength(1)];
-            for (var i = 0; i < amountOfObjects; i++)
+            var tempCol = col - 1;
+            for (int i = tempCol; i >= 0 && col != 0; i--)
             {
-                AssignElement(tempMatrix, 0, i);
-
-                GeneratePaths(tempMatrix, 1);
-            }
-        }
-
-        private void GeneratePaths(int[,] tempMatrix, int col)
-        {
-            for (int i = 0; i < amountOfObjects && col < amountOfObjects; i++)
-            {
-                if ((matrix[col, i] != 1) || (matrix[col, i] != 2))
+                if (Matrix[row, i] == 1)
                 {
-                    AssignElement(tempMatrix, col, i);
-                    GeneratePaths(tempMatrix, ++col);
-                }
-                if (col == 9)
-                {
-                    
+                    return false;
                 }
             }
+
+            return true;
         }
 
-        private void AssignElement(int[,] tempMatrix, int col, int row)
+        public bool IsColumnClear(int col, int row)
         {
-            tempMatrix[col, row] = 1;
-            GenerateCrossingOutPaths(tempMatrix, col, row);
+            var tempRow = row - 1;
+            for (int i = tempRow; i >= 0 && row != 0; i--)
+            {
+                if (Matrix[i, col] == 1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        private void GenerateCrossingOutPaths(int[,] tempMatrix, int col, int row)
+        public bool IsObliqueliesClear(int col, int row)
         {
-            if (possibleMoves.Contains("H"))
+            var descRow = row - 1;
+            var ascRow = row + 1;
+            for (var tempCol = col - 1; descRow >= 0 && tempCol >= 0; descRow--, tempCol--)
             {
-                CrossOutRow(tempMatrix, col, row);
+                if (Matrix[descRow, tempCol] == 1)
+                {
+                    return false;
+                }
             }
-            if (possibleMoves.Contains("V"))
+
+            for (var tempCol = col - 1; ascRow < Matrix.GetLength(0) && tempCol >= 0; ascRow++, tempCol--)
             {
-                CrossOutColumn(tempMatrix, col, row);
+                if (Matrix[ascRow, tempCol] == 1)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool IsKnightStyleCrossingOutClear(int col, int row)
+        {
+            if (!IsCellClear(col, -1, row, -2))   ////
+            {                                       //
+                return false;                       //
+            }
+
+            if (!IsCellClear(col, -2, row, -1))   //////
+            {                                         //
+                return false;                     
+            }
+
+            if (!IsCellClear(col, -2, row, 1))       //
+            {                                    //////
+                return false;                     
+            }
+
+            if (!IsCellClear(col, -1, row, 2))       //
+            {                                        //
+                return false;                      ////
+            }
+            
+            return true;
+        }
+
+        private bool IsCellClear(int col, int pCol, int row, int pRow)
+        {
+            var tempCol = col + pCol;
+            var tempRow = row + pRow;
+            if ((tempCol > -1)
+                && (tempRow > -1)
+                && (tempCol < Matrix.GetLength(0))
+                && (tempRow < Matrix.GetLength(1)))     
+            {
+                if (Matrix[tempRow, tempCol] != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool TryAssignElement(int col, int row)
+        {
+            if (IsCrossingOutPathsClear(col, row))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void AssignElement(int col, int row)
+        {
+            Matrix[row, col] = 1;
+        }
+
+        public void UnassignElements(int col)
+        {
+            for (int i = col; col < Matrix.GetLength(0); col++)
+            {
+                for (int j = 0; j < Matrix.GetLength(0); j++)
+                {
+                    Matrix[j, i] = 0;
+                }
             }
         }
 
-        private void CrossOutColumn(int[,] tempMatrix, int col, int row)
+        private bool IsCrossingOutPathsClear(int col, int row)
         {
-            for (int i = 0; i < col; i++)
+            if (PossibleMoves.Contains("H"))
             {
-                tempMatrix[i, row] = 2;
+                if (!IsRowClear(col, row))
+                {
+                    return false;
+                }
             }
-        }
 
-        private void CrossOutRow(int[,] tempMatrix, int col, int row)
-        {
-            for (int i = 0; i < row; i++)
+            if (PossibleMoves.Contains("V"))
             {
-                tempMatrix[col, i] = 2;
+                if (!IsColumnClear(col, row))
+                {
+                    return false;
+                }
             }
+
+            if (PossibleMoves.Contains("V"))
+            {
+                if (!IsObliqueliesClear(col, row))
+                {
+                    return false;
+                }
+            }
+
+            if (PossibleMoves.Contains("KS"))
+            {
+                if (!IsKnightStyleCrossingOutClear(col, row))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

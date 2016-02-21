@@ -1,154 +1,265 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace DepthSearchAlgorith.Tests
 {
     [TestFixture]
     public class ChessBoardTests
     {
-        public class CorrectFormat : ChessBoardTests
+        public class RowCheck : ChessBoardTests
         {
-            private int[,] response;
-
-            [SetUp]
-            public void InitTest()
+            [Test]
+            public void ShouldNotFindAnyElementInRow()
             {
-                var operation = new ChessBoard(new int[15, 15], new List<string>(), 5);
-                response = operation.Run();
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 0, 0, 0},
+                                  { 0, 1, 0}
+                              };
+                var response = new ChessBoard(request).IsRowClear(2, 1);
+
+                Assert.IsTrue(response);
             }
 
             [Test]
-            public void ShouldReturnSameSizeMatrix()
+            public void ShouldNotCheckIfItsTheFirstCol()
             {
-                Assert.AreEqual(response.GetLength(0), 15);
-                Assert.AreEqual(response.GetLength(1), 15);
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 1, 0, 0},
+                                  { 0, 1, 0}
+                              };
+                var response = new ChessBoard(request).IsRowClear(0, 1);
+
+                Assert.IsTrue(response);
             }
 
             [Test]
-            public void ShouldMatrixContainCorrectAmountOfObjects()
+            public void ShouldFindElementInRow()
             {
-                var count = 0;
-                for (int i = 0; i < 15; i++)
-                {
-                    for (int j = 0; j < 15; j++)
-                    {
-                        if (response[i, j] == 1)
-                        {
-                            count++;
-                        }
-                    }
-                }
+                var request = new int[,]
+                             {
+                                  { 0, 1, 0},
+                                  { 1, 0, 0},
+                                  { 0, 1, 0}
+                             };
+                var response = new ChessBoard(request).IsRowClear(2, 1);
 
-                Assert.AreEqual(count, 225);
+                Assert.IsFalse(response);
+            }
+
+            [Test]
+            public void ShouldNotCheckPositionThatIsPassed()
+            {
+                var request = new int[,]
+                             {
+                                  { 0, 1, 0},
+                                  { 0, 1, 0},
+                                  { 0, 1, 0}
+                             };
+                var response = new ChessBoard(request).IsRowClear(1, 1);
+
+                Assert.IsTrue(response);
+            }
+        }
+
+        public class ColumnCheck : ChessBoardTests
+        {
+            [Test]
+            public void ShouldNotFindAnyElementInCol()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 0, 0},
+                                  { 0, 1, 1},
+                                  { 0, 0, 0}
+                              };
+                var response = new ChessBoard(request).IsColumnClear(0, 2);
+
+                Assert.IsTrue(response);
+            }
+
+            [Test]
+            public void ShouldNotCheckIfItsTheFirstCol()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 1, 0, 1},
+                                  { 0, 0, 0}
+                              };
+                var response = new ChessBoard(request).IsColumnClear(1, 0);
+
+                Assert.IsTrue(response);
+            }
+
+            [Test]
+            public void ShouldFindElementInCol()
+            {
+                var request = new int[,]
+                             {
+                                  { 0, 1, 0},
+                                  { 1, 0, 1},
+                                  { 0, 0, 0}
+                             };
+                var response = new ChessBoard(request).IsColumnClear(2, 2);
+
+                Assert.IsFalse(response);
+            }
+
+            [Test]
+            public void ShouldNotCheckPositionThatIsPassed()
+            {
+                var request = new int[,]
+                             {
+                                  { 0, 0, 0},
+                                  { 1, 1, 1},
+                                  { 0, 0, 0}
+                             };
+                var response = new ChessBoard(request).IsColumnClear(1, 1);
+
+                Assert.IsTrue(response);
+            }
+        }
+
+        public class ObliquelyCheck : ChessBoardTests
+        {
+            [Test]
+            public void ShouldNotFindElementAnyInDescObliquely()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 0, 0},
+                                  { 0, 0, 0},
+                                  { 0, 1, 0}
+                              };
+                var response = new ChessBoard(request).IsObliqueliesClear(1, 2);
+
+                Assert.IsTrue(response);
+            }
+
+            [Test]
+            public void ShouldFindElementInDescObliquely()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 0, 0},
+                                  { 1, 0, 0},
+                                  { 0, 1, 0}
+                              };
+                var response = new ChessBoard(request).IsObliqueliesClear(1, 2);
+
+                Assert.IsFalse(response);
+            }
+
+            [Test]
+            public void ShouldNotFindElementAnyInAscObliquely()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 0, 0, 0},
+                                  { 0, 0, 0}
+                              };
+                var response = new ChessBoard(request).IsObliqueliesClear(1, 0);
+
+                Assert.IsTrue(response);
+            }
+
+            [Test]
+            public void ShouldFindElementInAscObliquely()
+            {
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 1, 0, 0},
+                                  { 0, 0, 0}
+                              };
+                var response = new ChessBoard(request).IsObliqueliesClear(1, 0);
+
+                Assert.IsFalse(response);
             }
 
         }
 
-        public class HorizontalFigureCrossingOut : ChessBoardTests
+        public class KnightSylecheck : ChessBoardTests
         {
-            private int[,] response;
-
-            [SetUp]
-            public void InitTest()
+            [Test]
+            public void ShouldCheckUpByOneLeftByTwo()
             {
-                var operation = new ChessBoard(new int[3, 3], new List<string> { "H" }, 3);
-                response = operation.Run();
+                var request = new int[,]
+                              {
+                                  { 1, 0, 0},
+                                  { 0, 0, 1},
+                                  { 0, 0, 0}
+                              };
+
+                var response = new ChessBoard(request).IsKnightStyleCrossingOutClear(2, 1);
+
+                Assert.IsFalse(response);
             }
 
             [Test]
-            public void ShouldNotBeAnyObjectInTheSameLine()
+            public void ShouldCheckUpByTwoLeftByOne()
             {
-                var isInTheSameLine = false;
+                var request = new int[,]
+                              {
+                                  { 1, 0, 0},
+                                  { 0, 0, 0},
+                                  { 0, 1, 0}
+                              };
 
-                for (int i = 0; i < 3; i++)
-                {
-                    var count = 0;
-                    for (int j = 0; j < 3; j++)
-                    {
-                        if (response[i, j] == 1)
-                        {
-                            count++;
-                        }
-                    }
-                    if (count > 1)
-                    {
-                        isInTheSameLine = true;
-                    }
-                }
+                var response = new ChessBoard(request).IsKnightStyleCrossingOutClear(1, 2);
 
-                Assert.IsFalse(isInTheSameLine);
-            }
-        }
-
-        public class VerticalFigureCrossingOut : ChessBoardTests
-        {
-            private int[,] response;
-
-            [SetUp]
-            public void InitTest()
-            {
-                var operation = new ChessBoard(new int[3, 3], new List<string> { "V" }, 3);
-                response = operation.Run();
+                Assert.IsFalse(response);
             }
 
             [Test]
-            public void ShouldNotBeAnyObjectInTheSameColumn()
+            public void ShouldCheckDownByOneLeftByTwo()
             {
-                var inTheSameColumn = false;
+                var request = new int[,]
+                              {
+                                  { 0, 0, 0},
+                                  { 0, 0, 1},
+                                  { 1, 0, 0}
+                              };
 
-                for (int j = 0; j < 3; j++)
-                {
-                    var count = 0;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (response[i, j] == 1)
-                        {
-                            count++;
-                        }
-                    }
-                    if (count > 1)
-                    {
-                        inTheSameColumn = true;
-                    }
-                }
+                var response = new ChessBoard(request).IsKnightStyleCrossingOutClear(2, 1);
 
-                Assert.IsFalse(inTheSameColumn);
-            }
-        }
-
-        public class ObliquelyFigureCrossingOut : ChessBoardTests
-        {
-            private int[,] response;
-
-            [SetUp]
-            public void InitTest()
-            {
-                var operation = new ChessBoard(new int[3, 3], new List<string> { "O" }, 1);
-                response = operation.Run();
+                Assert.IsFalse(response);
             }
 
             [Test]
-            public void ShouldNotBeAnyObjectInTheSameColumn()
+            public void ShouldCheckDownByTwoLeftByOne()
             {
-                var inTheSameDiagonal = false;
+                var request = new int[,]
+                              {
+                                  { 0, 1, 0},
+                                  { 0, 0, 0},
+                                  { 1, 0, 0}
+                              };
 
-                for (int j = 0; j < 3; j++)
-                {
-                    var count = 0;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (response[j, i] == 1)
-                        {
-                            
-                        }
-                    }
-                    if (count > 1)
-                    {
-                        inTheSameDiagonal = true;
-                    }
-                }
+                var response = new ChessBoard(request).IsKnightStyleCrossingOutClear(1, 0);
 
-                Assert.IsFalse(inTheSameDiagonal);
+                Assert.IsFalse(response);
+            }
+
+            [Test]
+            public void ShouldFindAnyElement()
+            {
+                var request = new int[,]
+                              {
+                                  { 1, 1, 0, 1, 1},
+                                  { 1, 0, 1, 1, 1},
+                                  { 1, 1, 1, 1, 1},
+                                  { 1, 0, 1, 1, 1},
+                                  { 1, 1, 0, 1, 1}
+                              };
+
+                var response = new ChessBoard(request).IsKnightStyleCrossingOutClear(3, 2);
+
+                Assert.IsTrue(response);
             }
         }
     }

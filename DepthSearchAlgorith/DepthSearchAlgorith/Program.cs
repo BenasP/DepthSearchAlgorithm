@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DepthSearchAlgorith
 {
@@ -16,9 +18,28 @@ namespace DepthSearchAlgorith
             //O - obliquely
             //KS - knight style
             var possibleMoves = new List<string> { "H", "V", "O", "KS" };
-
-            var chessBoard = new ChessBoard(matrix, possibleMoves, amountOfObjects);
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+            var chessBoard = new DepthSearch(matrix, possibleMoves, amountOfObjects);
             var generatedChessBoard = chessBoard.Run();
+            stopWatch.Stop();
+            TimeSpan ts = stopWatch.Elapsed;
+            //  PrintMatrix(generatedChessBoard);
+            Console.WriteLine($"Time consumed: { ts.TotalSeconds }");
+
+            Console.ReadLine();
+        }
+
+        private static void PrintMatrix(int[,] generatedChessBoard)
+        {
+            for (int i = 0; i < matrixLenght; i++)
+            {
+                for (int j = 0; j < matrixWidth; j++)
+                {
+                    Console.Write(generatedChessBoard[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
