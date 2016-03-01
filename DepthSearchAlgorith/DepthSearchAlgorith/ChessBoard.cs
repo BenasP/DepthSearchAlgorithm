@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DepthSearchAlgorith
 {
@@ -9,6 +11,7 @@ namespace DepthSearchAlgorith
         public int[,] Matrix { get; set; }
         public List<string> PossibleMoves { get; set; }
         public bool IsAssignmentSuccessful { get; set; } = true;
+        public int[] PositionArray { get; set; }
 
         public ChessBoard(int[,] matrix)
         {
@@ -20,6 +23,18 @@ namespace DepthSearchAlgorith
             Matrix = matrix;
             PossibleMoves = possibleMoves;
         }
+
+        public ChessBoard(int[] array, List<string> possibleMoves)
+        {
+            PositionArray = array;
+            PossibleMoves = possibleMoves;
+        }
+
+        public ChessBoard(int[] array)
+        {
+            PositionArray = array;
+        }
+#region Matrix
 
         public bool IsRowClear(int col, int row)
         {
@@ -81,19 +96,19 @@ namespace DepthSearchAlgorith
 
             if (!IsCellClear(col, -2, row, -1))   //////
             {                                         //
-                return false;                     
+                return false;
             }
 
             if (!IsCellClear(col, -2, row, 1))       //
             {                                    //////
-                return false;                     
+                return false;
             }
 
             if (!IsCellClear(col, -1, row, 2))       //
             {                                        //
                 return false;                      ////
             }
-            
+
             return true;
         }
 
@@ -104,7 +119,7 @@ namespace DepthSearchAlgorith
             if ((tempCol > -1)
                 && (tempRow > -1)
                 && (tempCol < Matrix.GetLength(0))
-                && (tempRow < Matrix.GetLength(1)))     
+                && (tempRow < Matrix.GetLength(1)))
             {
                 if (Matrix[tempRow, tempCol] != 0)
                 {
@@ -177,5 +192,125 @@ namespace DepthSearchAlgorith
 
             return true;
         }
+
+        #endregion
+
+#region Array
+
+        public bool IsObliqueliesClearInArray(int col, int row)
+        {
+            var descPosition = row;
+            var ascPosition = row;
+            for (int i = col; i >= 0; i--)
+            {
+                if ((PositionArray[i] == descPosition) || (PositionArray[i] == ascPosition))
+                {
+                    return false;
+                }
+                descPosition = descPosition - 1;
+                ascPosition = ascPosition + 1;
+            }
+
+            return true;
+        }
+
+        public bool IsRowClearInArray(int row)
+        {
+            return !PositionArray.Contains(row);
+        }
+
+        public bool TryAssignArrayElement(int col, int row)
+        {
+            if (IsCrossingOutPathsInArrayClear(col, row))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsCrossingOutPathsInArrayClear(int col, int row)
+        {
+            if (PossibleMoves.Contains("H"))
+            {
+                if (!IsRowClearInArray(row))
+                {
+                    return false;
+                }
+            }
+
+            if (PossibleMoves.Contains("V"))
+            {
+                if (!IsObliqueliesClearInArray(col, row))
+                {
+                    return false;
+                }
+            }
+
+            //if (PossibleMoves.Contains("KS"))
+            //{
+            //    if (!IsKnightStyleCrossingOutClearInArray(col, row))
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            return true;
+        }
+
+        public bool IsKnightStyleCrossingOutClearInArray(int col, int row)
+        {
+            if (!IsArrayCellClear(col - 1, row -2))  ////
+            {                                          //
+                return false;                          //
+            }
+
+            if (!IsArrayCellClear(col - 2, row - 1))   //////
+            {                                              //
+                return false;
+            }
+
+            if (!IsArrayCellClear(col + 1, row - 2))     //
+            {                                        //////
+                return false;
+            }
+
+            if (!IsArrayCellClear(col + 2, row - 1))    //
+            {                                           //
+                return false;                         ////
+            }
+
+            return true;
+        }
+
+        private bool IsArrayCellClear(int col, int row)
+        {
+            if ((col > -1)
+                && (row > -1)
+                && (col < PositionArray.Length)
+                && (row < PositionArray.Length))
+            {
+                if (PositionArray[col] == row)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public void AssignArrayElement(int column, int row)
+        {
+            PositionArray[column] = row;
+        }
+
+        public void UnassignArrayElements(int column)
+        {
+            PositionArray[column] = -1;
+        }
+
+        #endregion
+
+        
     }
 }

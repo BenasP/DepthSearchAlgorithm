@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ChessBoard.cs" />
     <Compile Include="DepthSearch.cs" />
+    <Compile Include="DepthSearchUsingArray.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
