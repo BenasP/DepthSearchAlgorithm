@@ -9,7 +9,7 @@ namespace DepthSearchAlgorith
     {
         private const int matrixLenght = 10;
         private const int matrixWidth = 10;
-        private const int amountOfObjects = 30;
+        private const int amountOfObjects = 10;
 
         static void Main(string[] args)
         {
@@ -30,9 +30,29 @@ namespace DepthSearchAlgorith
             stopWatch.Stop();
             TimeSpan ts = stopWatch.Elapsed;
             // PrintMatrix(generatedChessBoard);
+            PrintArray(generatedChessBoard);
             Console.WriteLine($"Time consumed: { ts.TotalSeconds }");
 
             Console.ReadLine();
+        }
+
+        private static void PrintArray(int[] generatedChessBoard)
+        {
+            for (int i = 0; i < generatedChessBoard.Length; i++)
+            {
+                for (int j = 0; j < amountOfObjects; j++)
+                {
+                    if (generatedChessBoard[i] == j)
+                    {
+                        Console.Write($" 1");
+                    }
+                    else
+                    {
+                        Console.Write($" 0");
+                    }
+                }
+                Console.WriteLine();
+            }
         }
 
         private static void PrintMatrix(int[,] generatedChessBoard)

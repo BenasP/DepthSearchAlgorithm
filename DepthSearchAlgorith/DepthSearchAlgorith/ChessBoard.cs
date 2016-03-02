@@ -239,7 +239,7 @@ namespace DepthSearchAlgorith
                 }
             }
 
-            if (PossibleMoves.Contains("V"))
+            if (PossibleMoves.Contains("O"))
             {
                 if (!IsObliqueliesClearInArray(col, row))
                 {
@@ -247,35 +247,35 @@ namespace DepthSearchAlgorith
                 }
             }
 
-            //if (PossibleMoves.Contains("KS"))
-            //{
-            //    if (!IsKnightStyleCrossingOutClearInArray(col, row))
-            //    {
-            //        return false;
-            //    }
-            //}
+            if (PossibleMoves.Contains("KS"))
+            {
+                if (!IsKnightStyleCrossingOutClearInArray(col, row))
+                {
+                    return false;
+                }
+            }
 
             return true;
         }
 
         public bool IsKnightStyleCrossingOutClearInArray(int col, int row)
         {
-            if (!IsArrayCellClear(col - 1, row -2))  ////
+            if (!IsArrayCellClear(col, -1, row, -2)) ////
             {                                          //
                 return false;                          //
             }
 
-            if (!IsArrayCellClear(col - 2, row - 1))   //////
+            if (!IsArrayCellClear(col, -2, row, -1))   //////
             {                                              //
                 return false;
             }
 
-            if (!IsArrayCellClear(col + 1, row - 2))     //
+            if (!IsArrayCellClear(col, -2, row, 1))      //
             {                                        //////
                 return false;
             }
 
-            if (!IsArrayCellClear(col + 2, row - 1))    //
+            if (!IsArrayCellClear(col, -1, row, 2))     //
             {                                           //
                 return false;                         ////
             }
@@ -283,14 +283,16 @@ namespace DepthSearchAlgorith
             return true;
         }
 
-        private bool IsArrayCellClear(int col, int row)
+        private bool IsArrayCellClear(int col, int pCol, int row, int pRow)
         {
-            if ((col > -1)
-                && (row > -1)
-                && (col < PositionArray.Length)
-                && (row < PositionArray.Length))
+            var tempCol = col + pCol;
+            var tempRow = row + pRow;
+            if ((tempCol > -1)
+                && (tempRow > -1)
+                && (tempCol < PositionArray.Length)
+                && (tempRow < PositionArray.Length))
             {
-                if (PositionArray[col] == row)
+                if (PositionArray[tempCol] == tempRow)
                 {
                     return false;
                 }
